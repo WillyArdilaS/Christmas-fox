@@ -3,34 +3,53 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerInput), typeof(SpriteRenderer), typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class SleighController : MonoBehaviour
 {
     // === Input ===
     private PlayerInput playerInput;
 
-    // === Positions ===
-    [SerializeField] private Transform[] positions;
-    [SerializeField]  private int currentPositionIndex;
+    // === Sprites ===
+    [SerializeField] private Sprite[] sleighSprites;
+    private SpriteRenderer spriteRend;
+    private Collider2D col2D;
+
+    // === Movement ===
+    [SerializeField] private Transform[] tracks;
+    private int currentTrackIndex;
+
+    // === Jump ===
+    [SerializeField] private float jumpForce;
+    private Rigidbody2D rb2D;
+    private bool isJumping = false;
 
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
+        spriteRend = GetComponent<SpriteRenderer>();
+        col2D = GetComponent<Collider2D>();
+        rb2D = GetComponent<Rigidbody2D>();
 
         playerInput.onActionTriggered += OnActionTriggered;
 
-        positions = positions.OrderBy(road => road.transform.position.x).ToArray();
-        
-        currentPositionIndex = Array.FindIndex(positions, position => Mathf.Approximately(position.position.x, transform.position.x));
-        if (currentPositionIndex == -1)
+        tracks = tracks.OrderBy(track => track.transform.position.x).ToArray();
+
+        currentTrackIndex = Array.FindIndex(tracks, track => Mathf.Approximately(track.position.x, transform.position.x));
+        if (currentTrackIndex == -1)
         {
-            Debug.LogWarning($"No se encontró un road con la misma posición X que {gameObject.name}");
+            Debug.LogWarning($"No se encontró un track con la misma posición X que {gameObject.name}");
         }
+    }
+
+    void Update()
+    {
+        if (rb2D.linearVelocityY == 0) isJumping = false;
     }
 
     private void OnActionTriggered(InputAction.CallbackContext ctx)
     {
-        if(ctx.started)
+        if (ctx.started)
         {
             switch (ctx.action.name)
             {
@@ -41,21 +60,32 @@ public class SleighController : MonoBehaviour
                     ChangeTrack(1);
                     break;
                 case "Jump / Go Inside":
+                    Jump();
                     break;
                 default:
                     Debug.LogWarning($"La acción '{ctx.action.name}' no existe en el action map '{ctx.action.actionMap.name}'");
                     break;
             }
-        } 
+        }
     }
 
     private void ChangeTrack(int direction)
     {
-        if ((direction == -1 && currentPositionIndex > 0) || (direction == 1 && currentPositionIndex < positions.Length - 1))
+        if (isJumping) return;
+
+        if ((direction == -1 && currentTrackIndex > 0) || (direction == 1 && currentTrackIndex < tracks.Length - 1))
         {
-            currentPositionIndex += direction;
-            transform.position = new Vector2(positions[currentPositionIndex].position.x, transform.position.y);
-            //Debug.Log(positions[currentPositionIndex].localPosition.x);
+            currentTrackIndex += direction;
+            transform.position = new Vector2(tracks[currentTrackIndex].position.x, transform.position.y);
+
+            spriteRend.sprite = sleighSprites[currentTrackIndex];
+            col2D.offset = new Vector2(col2D.offset.x - direction, col2D.offset.y);
         }
+    }
+
+    private void Jump()
+    {
+        isJumping = true;
+        rb2D.AddForceY(jumpForce, ForceMode2D.Impulse);
     }
 }

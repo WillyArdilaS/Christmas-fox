@@ -9,9 +9,9 @@ public class SleighController : MonoBehaviour
     // === Input ===
     private PlayerInput playerInput;
 
-    // === Tracks ===
-    [SerializeField] private GameObject[] tracks;
-    private int currentTrackIndex;
+    // === Positions ===
+    [SerializeField] private Transform[] positions;
+    [SerializeField]  private int currentPositionIndex;
 
     void Awake()
     {
@@ -19,10 +19,10 @@ public class SleighController : MonoBehaviour
 
         playerInput.onActionTriggered += OnActionTriggered;
 
-        tracks = tracks.OrderBy(road => road.transform.position.x).ToArray();
+        positions = positions.OrderBy(road => road.transform.position.x).ToArray();
         
-        currentTrackIndex = Array.FindIndex(tracks, track => Mathf.Approximately(track.transform.position.x, transform.position.x));
-        if (currentTrackIndex == -1)
+        currentPositionIndex = Array.FindIndex(positions, position => Mathf.Approximately(position.position.x, transform.position.x));
+        if (currentPositionIndex == -1)
         {
             Debug.LogWarning($"No se encontró un road con la misma posición X que {gameObject.name}");
         }
@@ -42,16 +42,20 @@ public class SleighController : MonoBehaviour
                     break;
                 case "Jump / Go Inside":
                     break;
+                default:
+                    Debug.LogWarning($"La acción '{ctx.action.name}' no existe en el action map '{ctx.action.actionMap.name}'");
+                    break;
             }
         } 
     }
 
     private void ChangeTrack(int direction)
     {
-        if ((direction == -1 && currentTrackIndex > 0) || (direction == 1 && currentTrackIndex < tracks.Length - 1))
+        if ((direction == -1 && currentPositionIndex > 0) || (direction == 1 && currentPositionIndex < positions.Length - 1))
         {
-            currentTrackIndex += direction;
-            transform.position = new Vector2(tracks[currentTrackIndex].transform.position.x, transform.position.y);
+            currentPositionIndex += direction;
+            transform.position = new Vector2(positions[currentPositionIndex].position.x, transform.position.y);
+            //Debug.Log(positions[currentPositionIndex].localPosition.x);
         }
     }
 }

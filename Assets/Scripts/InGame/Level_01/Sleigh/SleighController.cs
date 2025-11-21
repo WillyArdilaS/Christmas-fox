@@ -58,7 +58,7 @@ public class SleighController : MonoBehaviour
 
     private void OnActionTriggered(InputAction.CallbackContext ctx)
     {
-        if (ctx.started)
+        if (ctx.action.actionMap.name == "Sleigh" && ctx.started)
         {
             switch (ctx.action.name)
             {

@@ -29,8 +29,8 @@ public class GameManager : MonoBehaviour
 
     // === Race ===
     [Header("Race")]
-    [SerializeField] private int currentLap = 0;
     private const int LAP_DURATION = 60;
+    private int currentLap = 0;
 
     // === Coroutines ===
     private Coroutine gameTimerRoutine;
@@ -41,9 +41,10 @@ public class GameManager : MonoBehaviour
     // === Properties ===
     public GameObject TrackManager => trackManager;
     public GameState State { get => gameState; set => gameState = value; }
-    public int CurrentGameTimer => currentGameTime;
+    public int CurrentGameTime => currentGameTime;
     public int TotalGameDuration => gameDuration;
     public int CurrentLap { get => currentLap; set => currentLap = value; }
+    public int LapDuration => LAP_DURATION;
 
     void Awake()
     {

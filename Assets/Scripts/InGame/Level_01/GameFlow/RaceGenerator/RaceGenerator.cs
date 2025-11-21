@@ -34,7 +34,7 @@ public class RaceGenerator : MonoBehaviour
 
     void Update()
     {
-        currentGlobalTime = GameManager.instance.CurrentGameTimer;
+        currentGlobalTime = GameManager.instance.CurrentGameTime;
 
         // Check if there are pending timestamps AND if the current time matches the next scheduled timestamp
         if (pendingTimes.Count > 0 && currentGlobalTime == pendingTimes.Peek())
@@ -52,7 +52,7 @@ public class RaceGenerator : MonoBehaviour
     public void InitializeRace()
     {
         currentDifficultyEvent = null;
-        currentGlobalTime = GameManager.instance.CurrentGameTimer;
+        currentGlobalTime = GameManager.instance.CurrentGameTime;
         currentSpawnRate = 0f;
         spawnTimer = 0f;
         pendingTimes = new Queue<int>(originalDifficultyEventTimes);

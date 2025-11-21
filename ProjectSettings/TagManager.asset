@@ -6,6 +6,8 @@ TagManager:
   tags:
   - SmallObstacle
   - BigObstacle
+  - Undefined
+  - Goal
   layers:
   - Default
   - TransparentFX

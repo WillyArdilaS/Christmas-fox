@@ -5,7 +5,7 @@ using UnityEngine.Splines;
 public class TrackManager : MonoBehaviour
 {
     [SerializeField] private SplineContainer[] tracks;
-    [SerializeField] private bool[] trackAvailable;
+    private bool[] trackAvailable;
 
     // === Properties ===
     public SplineContainer[] Tracks => tracks;

@@ -71,7 +71,6 @@ public class SpawnManagerBase : MonoBehaviour
         obstacle.transform.position = spline.EvaluatePosition(0f); // Position at the start point of the spline
         splineFollower.InitializeFollower(spline, globalSpeed);
 
-
         StartCoroutine(ReleaseTrackNextFrame(trackIndex));
     }
 

@@ -1229,6 +1229,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 951511428}
+  - component: {fileID: 951511430}
   - component: {fileID: 951511429}
   m_Layer: 0
   m_Name: SequenceManager
@@ -1265,10 +1266,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lightManager: {fileID: 253882082}
-  size: 3
-  min: 1
-  max: 12
   sequenceList: 
+--- !u!114 &951511430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951511427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 477429dbbaa636d4ca6b1554e9a501dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sequenceEvents:
+  - newSize: 3
+    newMin: 1
+    newMax: 12
+  - newSize: 5
+    newMin: 1
+    newMax: 12
+  - newSize: 7
+    newMin: 1
+    newMax: 12
 --- !u!1001 &1007610056
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2456,6 +2476,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2019467882}
+  - component: {fileID: 2019467883}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2481,6 +2502,19 @@ Transform:
   - {fileID: 253882081}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2019467883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2019467881}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed68f2d66b77f4f4bb10351a34b5b4a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameState: 0
 --- !u!1001 &2046765926
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,29 +7,35 @@ public class SequenceManager : MonoBehaviour
 {
     // === Managers ===
     [SerializeField] private LightManager lightManager;
-    
+
     // === Sequence ===
-    [SerializeField] private int size;
-    [SerializeField] private int min;
-    [SerializeField] private int max;
+    private int size = 0;
+    private int min = 0;
+    private int max = 0;
     [SerializeField] private List<int> sequenceList = new();
+
+    // === Events ===
+    public event Action SequenceMatched;
+
+    // === Properties ===
+    public int Size { set => size = value; }
+    public int Min { set => min = value; }
+    public int Max { set => max = value; }
 
     void Awake()
     {
         lightManager.ActiveLightsUpdated += CompareSequence;
-
-        CreateSequence();
     }
 
     private void CreateSequence()
     {
-        int randomNumber = Random.Range(min, max + 1);
+        int randomNumber = UnityEngine.Random.Range(min, max + 1);
 
         for (int i = 0; i < size; i++)
         {
             while (sequenceList.Contains(randomNumber))
             {
-                randomNumber = Random.Range(min, max + 1);
+                randomNumber = UnityEngine.Random.Range(min, max + 1);
             }
 
             sequenceList.Add(randomNumber);
@@ -44,6 +51,7 @@ public class SequenceManager : MonoBehaviour
     private void CompareSequence(List<int> activeLights)
     {
         bool isEqual = sequenceList.SequenceEqual(activeLights);
-        Debug.Log(isEqual);
+
+        if (isEqual) SequenceMatched?.Invoke();
     }
 }

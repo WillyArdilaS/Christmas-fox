@@ -6,19 +6,16 @@ using UnityEngine;
 
 public class DifficultyManager : MonoBehaviour
 {
-    // === Spawn settings ===
+    // === Spawn Settings ===
     private SpawnManager spawnManager;
     private float currentSpawnRate;
     private float spawnTimer = 0f;
 
-    // === Difficulty events management ===
+    // === Difficulty Events Management ===
     [SerializeField] private DifficultyEventLevel2Data[] difficultyEvents;
     private DifficultyEventLevel2Data currentDifficultyEvent;
     private Queue<int> pendingTimes = new();
     private int currentGlobalTime = 0;
-
-    // === Coroutines ===
-    private Coroutine changeDifficultyRoutine;
 
     void Start()
     {
@@ -42,19 +39,16 @@ public class DifficultyManager : MonoBehaviour
             int matchTime = pendingTimes.Dequeue(); // Remove the matched timestamp from the queue
             currentDifficultyEvent = difficultyEvents.First(difEvent => (difEvent.Minutes * 60) + difEvent.Seconds == matchTime);
 
-            if (changeDifficultyRoutine != null) StopCoroutine(changeDifficultyRoutine);
-            changeDifficultyRoutine = StartCoroutine(ChangeDifficulty(currentDifficultyEvent));
+            ChangeDifficulty(currentDifficultyEvent);
         }
 
         StartSpawnLoop();
     }
 
-    private IEnumerator ChangeDifficulty(DifficultyEventLevel2Data difficultyEvent)
+    private void ChangeDifficulty(DifficultyEventLevel2Data difficultyEvent)
     {
         spawnManager.SpawnRate = difficultyEvent.NewSpawnRate;
         currentSpawnRate = difficultyEvent.NewSpawnRate;
-
-        yield return null;
     }
 
     private void StartSpawnLoop()

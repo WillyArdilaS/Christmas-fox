@@ -1299,7 +1299,6 @@ MonoBehaviour:
   speed: 200
   slidingDamping: 2
   reboundForce: 2
-  rotationSpeed: 12
   newColliderOffset: {x: 2.35, y: -0.266946}
 --- !u!50 &1492890106
 Rigidbody2D:
@@ -1820,7 +1819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minXPos: -4.5
   maxXPos: 4.5
-  spawnRate: 1.5
+  spawnRate: 0
   fruitPools:
   - {fileID: 2146911288}
   - {fileID: 494887444}

@@ -1299,6 +1299,7 @@ MonoBehaviour:
   speed: 200
   slidingDamping: 2
   reboundForce: 2
+  rotationSpeed: 12
   newColliderOffset: {x: 2.35, y: -0.266946}
 --- !u!50 &1492890106
 Rigidbody2D:

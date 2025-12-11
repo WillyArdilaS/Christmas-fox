@@ -1,11 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 public class LightManager : MonoBehaviour
 {
+    // === Lights ===
     [SerializeField] private HouseLightController[] houseLights;
     [SerializeField] private List<int> activeLights = new();
+
+    // === Events ===
+    public event Action<List<int>> ActiveLightsUpdated;
 
     void Awake()
     {
@@ -27,5 +32,7 @@ public class LightManager : MonoBehaviour
         {
             activeLights.Remove(currentHouseLight.HouseID);
         }
+
+        ActiveLightsUpdated?.Invoke(new List<int>(activeLights));
     }
 }

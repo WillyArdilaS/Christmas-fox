@@ -10,10 +10,13 @@ public class SequenceGenerator : MonoBehaviour
     [SerializeField] private SequenceEventData[] sequenceEvents;
     private SequenceEventData currentSequenceEvent;
     private int currentSequenceIndex = 0;
+    private MapLightsAnimator mapAnimator;
 
     void Awake()
     {
         sequenceManager = GetComponent<SequenceManager>();
+        mapAnimator = GameManagerLevel3.instance.MapManager.GetComponent<MapLightsAnimator>();
+
         sequenceManager.SequenceMatched += NextRound;
 
         CreateSequence();
@@ -40,6 +43,7 @@ public class SequenceGenerator : MonoBehaviour
         sequenceManager.Max = currentSequenceEvent.NewMax;
         
         sequenceManager.ResetSequence();
+        mapAnimator.StartAnimation(sequenceManager.SequenceList);
 
         currentSequenceIndex++;
         GameManagerLevel3.instance.State = GameManagerLevel3.GameState.ShowingSequence;

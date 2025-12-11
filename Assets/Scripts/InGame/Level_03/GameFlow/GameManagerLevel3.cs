@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [DefaultExecutionOrder(-1)]
@@ -7,14 +8,20 @@ public class GameManagerLevel3 : MonoBehaviour
     public static GameManagerLevel3 instance;
 
     // === Managers ===
-    private GameObject sequenceManager;
+    private GameObject mapManager;
 
     // === States ===
     public enum GameState { ShowingSequence, Playing, InPause, Finishing }
-    [SerializeField] private GameState gameState = GameState.ShowingSequence;
+    [SerializeField] private GameState gameState;
+
+    // === Player ===
+    [SerializeField] private FoxController foxController;
+
+    // === Tree ===
 
     // === Properties ===
     public GameState State { get => gameState; set => gameState = value; }
+    public GameObject MapManager => mapManager;
 
     void Awake()
     {
@@ -34,12 +41,14 @@ public class GameManagerLevel3 : MonoBehaviour
 
     void Update()
     {
+        foxController.CanMove = gameState == GameState.Playing;
+
         if (gameState == GameState.Finishing) FinishGame();
     }
 
     private void InitializeManagers()
     {
-        if (sequenceManager == null) sequenceManager = transform.Find("SequenceManager").gameObject;
+        if (mapManager == null) mapManager = transform.Find("MapManager").gameObject;
     }
 
     private void FinishGame()

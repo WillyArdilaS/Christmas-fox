@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 57c1cda713c71aa408972ad0cd6deab6
+guid: cfe5cf6f293d52a4cb1289d16b3341cb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7635563162873571100
-    second: RightArrow_0
+      213: -1630584162001482325
+    second: Foxy_Wreath_Assets-9_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: RightArrow_0
+      name: Foxy_Wreath_Assets-9_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 4
-        width: 215
-        height: 197
+        x: 0
+        y: 0
+        width: 72
+        height: 120
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c17232fdd38f6f960800000000000000
-      internalID: 7635563162873571100
+      spriteID: bad068708500f59e0800000000000000
+      internalID: -1630584162001482325
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      RightArrow_0: 7635563162873571100
+      Foxy_Wreath_Assets-9_0: -1630584162001482325
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

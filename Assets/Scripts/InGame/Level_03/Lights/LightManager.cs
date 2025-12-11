@@ -35,4 +35,14 @@ public class LightManager : MonoBehaviour
 
         ActiveLightsUpdated?.Invoke(new List<int>(activeLights));
     }
+
+    public void ResetActiveLights()
+    {
+        foreach (var houseLight in houseLights)
+        {
+            houseLight.TurnOffLight();
+        }
+
+        activeLights.Clear();
+    }
 }

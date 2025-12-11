@@ -21,6 +21,7 @@ public class SequenceManager : MonoBehaviour
     public int Size { set => size = value; }
     public int Min { set => min = value; }
     public int Max { set => max = value; }
+    public List<int> SequenceList => sequenceList;
 
     void Awake()
     {

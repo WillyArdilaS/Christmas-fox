@@ -17,6 +17,7 @@ public class FoxController : MonoBehaviour
     // === Movement ===
     [Header("Movement")]
     [SerializeField] private float speed;
+    private bool canMove = false;
     private Rigidbody2D rb2D;
     private Vector2 movementInput;
 
@@ -32,6 +33,7 @@ public class FoxController : MonoBehaviour
     public event Action GoInsidePressed;
 
     // === Properties ===
+    public bool CanMove { get => canMove; set => canMove = value; }
     public bool IsGoingInside { get => isGoingInside; set => isGoingInside = value; }
 
     void Awake()
@@ -74,6 +76,12 @@ public class FoxController : MonoBehaviour
 
     void Update()
     {
+        if (!canMove)
+        {
+            movementInput = Vector2.zero;
+            return;
+        }
+
         // Read movement input
         movementInput = moveAction.ReadValue<Vector2>();
 

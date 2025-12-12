@@ -1,8 +1,9 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(PlayerInput), typeof(Rigidbody2D))]
+[RequireComponent(typeof(PlayerInput), typeof(Rigidbody2D), typeof(Animator))]
 public class FoxController : MonoBehaviour
 {
     // === Input ===
@@ -20,26 +21,32 @@ public class FoxController : MonoBehaviour
     private bool canMove = false;
     private Rigidbody2D rb2D;
     private Vector2 movementInput;
+    private Animator animator;
 
     // === Sprite ===
     [Header("Sprite Rotation")]
     [SerializeField] private float rotationSpeed;
-    private float targetYRotation = 180f;
+    private float targetYRotation = 0f;
 
-    // === Enter The House ===
+    // === Go Inside ===
+    [Header("Go Inside Animation")]
+    [SerializeField] private float transitionTime;
     private bool isGoingInside = false;
+
+    // === Coroutines ===
+    private Coroutine goingInsideRoutine;
 
     // === Events ===
     public event Action GoInsidePressed;
 
     // === Properties ===
     public bool CanMove { get => canMove; set => canMove = value; }
-    public bool IsGoingInside { get => isGoingInside; set => isGoingInside = value; }
 
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         rb2D = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         playerInput.onActionTriggered += OnActionTriggered;
         moveAction = playerInput.actions["Move"];
@@ -71,14 +78,16 @@ public class FoxController : MonoBehaviour
         {
             // Horizontal movement
             rb2D.linearVelocityX = desiredVelocity;
+            animator.SetBool("b_isWalking", true);
         }
     }
 
     void Update()
     {
-        if (!canMove)
+        if (!canMove || isGoingInside)
         {
             movementInput = Vector2.zero;
+            animator.SetBool("b_isWalking", false);
             return;
         }
 
@@ -88,11 +97,15 @@ public class FoxController : MonoBehaviour
         // Determine desired rotation according to direction
         if (movementInput.x > 0)
         {
-            targetYRotation = 180f;
+            targetYRotation = 0f;
         }
         else if (movementInput.x < 0)
         {
-            targetYRotation = 0f;
+            targetYRotation = 180f;
+        }
+        else
+        {
+            animator.SetBool("b_isWalking", false);
         }
 
         // Interpolate to the target rotation
@@ -106,10 +119,22 @@ public class FoxController : MonoBehaviour
         {
             if (ctx.action.name == "Go Inside" && !isGoingInside)
             {
-                isGoingInside = true;
+                if (goingInsideRoutine != null) StopCoroutine(goingInsideRoutine);
+                goingInsideRoutine = StartCoroutine(GoInside());
                 GoInsidePressed?.Invoke();
             }
         }
+    }
+
+    private IEnumerator GoInside()
+    {
+        isGoingInside = true;
+        animator.SetBool("b_isLookingBack", true);
+
+        yield return new WaitForSeconds(transitionTime);
+
+        isGoingInside = false;
+        animator.SetBool("b_isLookingBack", false);
     }
 
     public void ResetPosition()
@@ -117,7 +142,7 @@ public class FoxController : MonoBehaviour
         rb2D.position = new Vector2(minXPos, rb2D.position.y);
         rb2D.linearVelocityX = 0;
 
-        targetYRotation = 180f;
+        targetYRotation = 0f;
         transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
     }
 }

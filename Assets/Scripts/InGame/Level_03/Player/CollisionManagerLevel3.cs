@@ -29,7 +29,6 @@ public class CollisionManagerLevel3 : MonoBehaviour
         if (collision.TryGetComponent(out HouseLightController house))
         {
             HouseEntered?.Invoke(house.HouseID);
-            foxController.IsGoingInside = false;
         }
 
         goInsidePressedThisFrame = false;

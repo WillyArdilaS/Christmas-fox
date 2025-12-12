@@ -12,6 +12,9 @@ public class LightManager : MonoBehaviour
     // === Events ===
     public event Action<List<int>> ActiveLightsUpdated;
 
+    // === Properties ===
+    public HouseLightController[] HouseLights => houseLights;
+
     void Awake()
     {
         houseLights = houseLights.OrderBy(light => light.HouseID).ToArray();
@@ -40,7 +43,7 @@ public class LightManager : MonoBehaviour
     {
         foreach (var houseLight in houseLights)
         {
-            houseLight.TurnOffLight();
+            houseLight.SetLight(false);
         }
 
         activeLights.Clear();

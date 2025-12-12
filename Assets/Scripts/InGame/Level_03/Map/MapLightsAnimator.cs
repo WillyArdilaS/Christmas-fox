@@ -31,8 +31,10 @@ public class MapLightsAnimator : MonoBehaviour
                 continue;
             }
 
+            // Turn on and off animation
             yield return new WaitForSeconds(transitionTime);
             currentLight.SetActive(true);
+            
             yield return new WaitForSeconds(lightOnDuration);
             currentLight.SetActive(false);
         }

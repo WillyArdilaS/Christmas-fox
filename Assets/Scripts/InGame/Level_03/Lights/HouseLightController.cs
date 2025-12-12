@@ -40,15 +40,9 @@ public class HouseLightController : MonoBehaviour
         LightSwitched?.Invoke(this);
     }
 
-    public void TurnOnLight()
+    public void SetLight(bool value)
     {
-        isOn = true;
-        houseLight.SetActive(isOn);
-    }
-    
-    public void TurnOffLight()
-    {
-        isOn = false;
+        isOn = value;
         houseLight.SetActive(isOn);
     }
 }

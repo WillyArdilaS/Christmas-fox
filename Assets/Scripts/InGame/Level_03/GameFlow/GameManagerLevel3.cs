@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 
 [DefaultExecutionOrder(-1)]
@@ -8,20 +8,33 @@ public class GameManagerLevel3 : MonoBehaviour
     public static GameManagerLevel3 instance;
 
     // === Managers ===
+    private GameObject sequenceManager;
     private GameObject mapManager;
+    private GameObject lightManager;
+    private GameObject treeManager;
 
     // === States ===
-    public enum GameState { ShowingSequence, Playing, InPause, Finishing }
+    public enum GameState { ShowingSequence, ShowingTree, Playing, InPause, Finishing }
     [SerializeField] private GameState gameState;
+
+    // === Camera ===
+    private CameraFollow cameraFollow;
 
     // === Player ===
     [SerializeField] private FoxController foxController;
 
     // === Tree ===
+    private TreeAnimator treeAnimator;
+
+    // === Events ===
+    public event Action RoundFinished;
 
     // === Properties ===
     public GameState State { get => gameState; set => gameState = value; }
+    public GameObject SequenceManager => sequenceManager;
     public GameObject MapManager => mapManager;
+    public GameObject LightManager => lightManager;
+    public GameObject TreeManager => treeManager;
 
     void Awake()
     {
@@ -37,6 +50,12 @@ public class GameManagerLevel3 : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Initialization
+        cameraFollow = Camera.main.GetComponent<CameraFollow>();
+        treeAnimator = treeManager.GetComponent<TreeAnimator>();
+
+        treeAnimator.LightedTree += ResetRound;
     }
 
     void Update()
@@ -48,7 +67,22 @@ public class GameManagerLevel3 : MonoBehaviour
 
     private void InitializeManagers()
     {
+        if (sequenceManager == null) sequenceManager = transform.Find("SequenceManager").gameObject;
         if (mapManager == null) mapManager = transform.Find("MapManager").gameObject;
+        if (lightManager == null) lightManager = transform.Find("LightManager").gameObject;
+        if (treeManager == null) treeManager = transform.Find("TreeManager").gameObject;
+    }
+
+    private void ResetRound()
+    {
+        RoundFinished?.Invoke();
+
+        if (gameState == GameState.Finishing) return;
+
+        cameraFollow.ResetPosition();
+        foxController.ResetPosition();
+        lightManager.GetComponent<LightManager>().ResetActiveLights();
+        treeAnimator.TurnOffTree();
     }
 
     private void FinishGame()

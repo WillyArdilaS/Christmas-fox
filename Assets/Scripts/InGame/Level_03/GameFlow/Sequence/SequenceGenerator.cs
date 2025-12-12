@@ -1,9 +1,9 @@
-using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(SequenceManager))]
 public class SequenceGenerator : MonoBehaviour
 {
+    // === Managers ===
     private SequenceManager sequenceManager;
 
     // === Sequence Events Management ===
@@ -17,7 +17,7 @@ public class SequenceGenerator : MonoBehaviour
         sequenceManager = GetComponent<SequenceManager>();
         mapAnimator = GameManagerLevel3.instance.MapManager.GetComponent<MapLightsAnimator>();
 
-        sequenceManager.SequenceMatched += NextRound;
+        GameManagerLevel3.instance.RoundFinished += NextRound;
 
         CreateSequence();
     }

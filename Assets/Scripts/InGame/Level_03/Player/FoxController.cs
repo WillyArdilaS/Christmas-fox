@@ -111,4 +111,13 @@ public class FoxController : MonoBehaviour
             }
         }
     }
+
+    public void ResetPosition()
+    {
+        rb2D.position = new Vector2(minXPos, rb2D.position.y);
+        rb2D.linearVelocityX = 0;
+
+        targetYRotation = 180f;
+        transform.rotation = Quaternion.Euler(0, targetYRotation, 0);
+    }
 }

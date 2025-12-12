@@ -8,6 +8,7 @@ public class GameManagerLevel3 : MonoBehaviour
     public static GameManagerLevel3 instance;
 
     // === Managers ===
+    private GameObject transitionManager;
     private GameObject sequenceManager;
     private GameObject mapManager;
     private GameObject lightManager;
@@ -23,14 +24,15 @@ public class GameManagerLevel3 : MonoBehaviour
     // === Player ===
     [SerializeField] private FoxController foxController;
 
-    // === Tree ===
+    // === Animation ===
     private TreeAnimator treeAnimator;
 
     // === Events ===
-    public event Action RoundFinished;
+    public event Action RoundStarted;
 
     // === Properties ===
     public GameState State { get => gameState; set => gameState = value; }
+    public GameObject TransitionManager => transitionManager;
     public GameObject SequenceManager => sequenceManager;
     public GameObject MapManager => mapManager;
     public GameObject LightManager => lightManager;
@@ -55,7 +57,12 @@ public class GameManagerLevel3 : MonoBehaviour
         cameraFollow = Camera.main.GetComponent<CameraFollow>();
         treeAnimator = treeManager.GetComponent<TreeAnimator>();
 
-        treeAnimator.LightedTree += ResetRound;
+        transitionManager.GetComponent<TransitionManager>().TransitionFinished += StartNewRound;
+    }
+
+    void Start()
+    {
+        RoundStarted?.Invoke();
     }
 
     void Update()
@@ -67,15 +74,16 @@ public class GameManagerLevel3 : MonoBehaviour
 
     private void InitializeManagers()
     {
+        if (transitionManager == null) transitionManager = transform.Find("TransitionManager").gameObject;
         if (sequenceManager == null) sequenceManager = transform.Find("SequenceManager").gameObject;
         if (mapManager == null) mapManager = transform.Find("MapManager").gameObject;
         if (lightManager == null) lightManager = transform.Find("LightManager").gameObject;
         if (treeManager == null) treeManager = transform.Find("TreeManager").gameObject;
     }
 
-    private void ResetRound()
+    private void StartNewRound()
     {
-        RoundFinished?.Invoke();
+        RoundStarted?.Invoke();
 
         if (gameState == GameState.Finishing) return;
 

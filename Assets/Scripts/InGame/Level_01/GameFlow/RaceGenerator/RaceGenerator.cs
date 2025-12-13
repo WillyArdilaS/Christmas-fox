@@ -5,20 +5,17 @@ using UnityEngine;
 
 public class RaceGenerator : MonoBehaviour
 {
-    // === Spawn settings ===
+    // === Spawn Settings ===
     [SerializeField] private SpawnManagerBase spawnManager;
     private float currentSpawnRate;
     private float spawnTimer = 0f;
 
-    // === Difficulty events management ===
+    // === Difficulty Events Management ===
     [SerializeField] private DifficultyEventLevel1Data[] difficultyEvents;
     private DifficultyEventLevel1Data currentDifficultyEvent;
     private readonly List<int> originalDifficultyEventTimes = new();
     private Queue<int> pendingTimes;
     private int currentGlobalTime = 0;
-
-    // === Coroutines ===
-    private Coroutine changeDifficultyRoutine;
 
     void Start()
     {
@@ -42,8 +39,7 @@ public class RaceGenerator : MonoBehaviour
             int matchTime = pendingTimes.Dequeue(); // Remove the matched timestamp from the queue
             currentDifficultyEvent = difficultyEvents.First(difEvent => (difEvent.Minutes * 60) + difEvent.Seconds == matchTime);
 
-            if (changeDifficultyRoutine != null) StopCoroutine(changeDifficultyRoutine);
-            changeDifficultyRoutine = StartCoroutine(ChangeDifficulty(currentDifficultyEvent));
+            ChangeDifficulty(currentDifficultyEvent);
         }
 
         StartSpawnLoop();
@@ -72,14 +68,12 @@ public class RaceGenerator : MonoBehaviour
         pendingTimes = filtered;
     }
 
-    private IEnumerator ChangeDifficulty(DifficultyEventLevel1Data difficultyEvent)
+    private void ChangeDifficulty(DifficultyEventLevel1Data difficultyEvent)
     {
         spawnManager.SpawnRate = difficultyEvent.NewSpawnRate;
         spawnManager.GlobalSpeed = difficultyEvent.NewGlobalSpeed;
 
         currentSpawnRate = difficultyEvent.NewSpawnRate;
-
-        yield return null;
     }
 
     private void StartSpawnLoop()
